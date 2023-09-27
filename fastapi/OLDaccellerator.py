@@ -3,12 +3,11 @@ import board
 import busio
 import time
 
-
 class Accellerator: 
     
-    def __init__(self, state, location): 
+    def __init__(self, state: bool, speed: float): 
         self.state = state
-        self.location = location
+        self.speed = speed
         
         # On the Jetson Nano
         # Bus 0 (pins 28,27) is board SCL_1, SDA_1 in the jetson board definition file
@@ -24,75 +23,46 @@ class Accellerator:
         
         print("Finished Initialzing Accellerator")
 
-    # Get State    
+        
     def get_state(self):
-        print(self.state)
         return self.state
     
-    # Get Location
-    def get_location(self): 
-        print(self.location)
-        return self.location
-
-    # Turn On 
+    def get_speed(self): 
+        return self.speed
+    
     def turn_on(self): 
         self.state = 1
         print("Accellerator_On")
         return self.state
     
-    # Turn Off
     def turn_off(self): 
         self.state = 0
-        print("Accellerator_Off")
         return self.state
     
-    # Test
-    def test_1(self): 
+    def test(self): 
         if self.state: 
             print("testmessage")
-            sweep = range(0,1)
+            sweep = range(0,180)
             for degree in sweep :
                 self.kit.servo[0].angle=degree
                 # kit.servo[1].angle=degree
                 time.sleep(0.01)
 
-            time.sleep(0.1)
+            time.sleep(0.5)
 
             sweep = range(180,0, -1)
             for degree in sweep :
                 self.kit.servo[0].angle=degree
     
-    # Test 2            
-    def test_2(self): 
+    def controller_location_to_pedal_degree(self, controller_location): 
         if self.state: 
-            print("testmessage")
-            self.kit.servo[0].angle=2
-    
-    def convert_controller_to_servo():
-        pass
-    
-    # Update Servo Location
-    def update_location(self, final_location): 
-        current_location = self.location
+            pass # TODO (convert value of pedal to degree?)
+                
+    def move_to_location(self): 
         if self.state: 
-            
-            final_location = final_location * (-20)
-            final_location  = round(final_location)
-            
-            # if final_location < self.location: 
-            #     self.location = self.location - 1 
-            # if final_location > self.location: 
-            #     self.location = self.location + 1 
-            
-            # print("Final Loc:", final_location, "Current Loc:", self.location)
-            
-            self.kit.servo[0].angle = self.location
-        
-        self.location = final_location
-        # TODO move motors to correct location 
-        # TODO update self.position to be final_position
-        return 1 # return new current position
+            pass # TODO (delete pass)
 
 
-# accel = Accellerator(1, 1)
-# accel.test_NEW()
+accel = Accellerator(1, 1)
+
+accel.turn_on()

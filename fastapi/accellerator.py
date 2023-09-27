@@ -4,7 +4,7 @@ import busio
 import time
 
 
-class Accellerator: 
+class Pedal: 
     
     def __init__(self, state, location): 
         self.state = state
@@ -26,30 +26,28 @@ class Accellerator:
 
     # Get State    
     def get_state(self):
-        print(self.state)
         return self.state
     
     # Get Location
     def get_location(self): 
-        print(self.location)
         return self.location
 
     # Turn On 
     def turn_on(self): 
+        self.return_to_zero()
         self.state = 1
-        print("Accellerator_On")
         return self.state
     
     # Turn Off
     def turn_off(self): 
+        self.return_to_zero()
         self.state = 0
-        print("Accellerator_Off")
         return self.state
     
     # Test
     def test_1(self): 
         if self.state: 
-            print("testmessage")
+            print("Motor Test Sweep")
             sweep = range(0,1)
             for degree in sweep :
                 self.kit.servo[0].angle=degree
@@ -68,16 +66,14 @@ class Accellerator:
             print("testmessage")
             self.kit.servo[0].angle=2
     
-    def convert_controller_to_servo():
-        pass
+    def convert_controller_to_servo(self, controller_location):
+        return round(controller_location * (-20))
     
     # Update Servo Location
-    def update_location(self, final_location): 
-        current_location = self.location
+    def update_location(self, final_location):
         if self.state: 
             
-            final_location = final_location * (-20)
-            final_location  = round(final_location)
+            final_location = self.convert_controller_to_servo(final_location)
             
             # if final_location < self.location: 
             #     self.location = self.location - 1 
@@ -89,10 +85,7 @@ class Accellerator:
             self.kit.servo[0].angle = self.location
         
         self.location = final_location
-        # TODO move motors to correct location 
-        # TODO update self.position to be final_position
-        return 1 # return new current position
-
-
-# accel = Accellerator(1, 1)
-# accel.test_NEW()
+        return self.location 
+    
+    def return_to_zero(self): 
+        self.kit.servo[0].angle = 0

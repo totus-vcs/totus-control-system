@@ -35,18 +35,18 @@ class Pedal:
     # Turn On 
     def turn_on(self): 
         self.return_to_zero()
-        self.state = 1
+        self.state = 'on'
         return self.state
     
     # Turn Off
     def turn_off(self): 
         self.return_to_zero()
-        self.state = 0
+        self.state = 'off'
         return self.state
     
     # Test
     def test_1(self): 
-        if self.state: 
+        if self.state == 'on': 
             print("Motor Test Sweep")
             sweep = range(0,1)
             for degree in sweep :
@@ -62,7 +62,7 @@ class Pedal:
     
     # Test 2            
     def test_2(self): 
-        if self.state: 
+        if self.state == 'on': 
             print("testmessage")
             self.kit.servo[0].angle=2
     
@@ -71,7 +71,7 @@ class Pedal:
     
     # Update Servo Location
     def update_location(self, final_location):
-        if self.state: 
+        if self.state == 'on': 
             
             final_location = self.convert_controller_to_servo(final_location)
             

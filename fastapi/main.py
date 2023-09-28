@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 ### Objects
 app = FastAPI()
-accellerator = Pedal(state=1, location=0)
+accellerator = Pedal(state='on', location=0)
 
 
 # Add CORS Middleware
@@ -29,11 +29,14 @@ app.add_middleware(
 # https://fastapi.tiangolo.com/tutorial/body/
 
 class MotorMessage(BaseModel):
-    state: bool
+    state: int
     speed: int
 
 class FloatMessage(BaseModel):
     value: float
+    
+class StringMessage(BaseModel):
+    value: str
 
 
 ### General Routes
@@ -53,19 +56,13 @@ def accel_getposition():
     accellerator.update_location(1)
     return accellerator.get_location()
 
-@app.put('/accellerator/turn_on')
-async def accel_turn_on(message: MotorMessage):
-    if message.state == 1: 
+@app.put('/accellerator/change_state')
+async def accel_turn_on(message: StringMessage):
+    if message.value == 'on': 
         accellerator.turn_on()
-        
-@app.put('/accellerator/turn_off')
-async def accel_turn_off(message: MotorMessage):
-    print(message.state)
-    print(message.speed)
-    if message.state == None: 
-        pass
-    elif message.state == 0: 
+    elif message.value == 'off': 
         accellerator.turn_off()
+
 
 @app.put('/accellerator/controller_location')
 async def accel_controller_location(message: FloatMessage):

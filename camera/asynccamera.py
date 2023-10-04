@@ -2,14 +2,35 @@
 Camera Stream using Websocket
 '''
 
-import socket, cv2, pickle, struct, imutils
+import socket, cv2, pickle, struct, imutils, requests
+
+
+while True: 
+    camera_state = requests.get("https://10.0.0.202:500/frontcam/getstate")
+    print("Camera State:", camera_state)
+    
+    if camera_state == "on": 
+        print("on")
+        
+
+
+
+
+
+
+
+
+
+
+
+'''
 
 # Socket Create
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host_name = socket.gethostname()
 host_ip = '10.0.0.202'
 print('HOST IP:', host_ip)
-port = 9999
+port = 8123
 socket_address = (host_ip, port)
 
 # Socket Bind
@@ -25,8 +46,10 @@ while True:
     print('GOT CONNECTION FROM:', addr)
     
     if client_socket:
-        vid = cv2.VideoCapture(1)
-
+        try: 
+            vid = cv2.VideoCapture(1)
+        except: 
+            continue 
         while (vid.isOpened()):
             img, frame = vid.read()
             frame = imutils.resize(frame, width=320)
@@ -41,3 +64,4 @@ while True:
                 # raise Exception(e)
                 break
 
+'''
